@@ -2,8 +2,6 @@
 #include <ESP8266WiFi.h>
 
 // FOR LDR
-int sensorPin = A0; // select the input pin for LDR
-int sensorValue = 0; // variable to store the value coming from the sensor
 boolean DoorOpen = true; // initialise door to open
 
 // FOR DISTANCE
@@ -22,8 +20,6 @@ const char* password = "Fotonik343"; // Insert Wifi key/password
 // specify the port to listen on as an argument
 WiFiServer server(80);
 String HTTP_req;          // stores the HTTP request
-boolean LED_status = 0;   // state of LED, off by default
-void ProcessCheckbox(WiFiClient cl);  // declaring function
 
 long microsecondsToCentimeters(long microseconds) {
   // The speed of sound is 340 m/s or 29 microseconds per centimeter.
@@ -35,7 +31,6 @@ long microsecondsToCentimeters(long microseconds) {
 void setup() {
   Serial.begin(9600);
   delay(10);
-
 
   // Connect to WiFi network
   Serial.println();
@@ -61,13 +56,11 @@ void setup() {
 }
 
 void loop() {
+
   // FOR LDR:
-  sensorValue = analogRead(sensorPin); // read the value from the sensor
-  // Serial.println(sensorValue); //prints the values coming from the sensor on the screen
   delay(100);
 
   int sensorReading = analogRead(A0);
-
 
   if (sensorReading < 800) {
     DoorOpen = true;
@@ -77,8 +70,6 @@ void loop() {
     DoorOpen = false;
     //Serial.print ("der er mørkt");
   }
-  Serial.println(DoorOpen);
-
 
   // FOR DISTANCE
   // establish variables for duration of the ping, and the distance result in cencimeters:
@@ -102,20 +93,14 @@ void loop() {
   // convert the time into a distance
   cm = microsecondsToCentimeters(duration);
 
-  Serial.print(cm);
-  Serial.print("cm");
-  Serial.println();
-
   delay(100);
-
-
 
   full = float((cm / (binBottom - binTop)) * 100);
 
   Serial.println(full, 5);
-  Serial.println(cm);
-  Serial.println(binBottom);
-  Serial.println(binTop);
+  //Serial.println(cm);
+  //Serial.println(binBottom);
+  //Serial.println(binTop);
 
 
   // Check if a client has connected
